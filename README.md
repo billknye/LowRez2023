@@ -1,1 +1,1 @@
-# LowRex2023
+# Low Rez Game Jam 2023
