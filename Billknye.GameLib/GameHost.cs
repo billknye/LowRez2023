@@ -1,5 +1,4 @@
-﻿using Billknye.GameLib.Components;
-using Billknye.GameLib.States;
+﻿using Billknye.GameLib.States;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Xna.Framework;
@@ -18,7 +17,7 @@ public sealed class GameHost<TInitialState> : Game
 
     private IGameStateManager? gameStateManager;
 
-    public GameHost(string[] args, Action<IServiceCollection> services = null)
+    public GameHost(string[] args, Action<IServiceCollection>? services = null)
     {
         graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
@@ -34,8 +33,6 @@ public sealed class GameHost<TInitialState> : Game
         var builder = Host.CreateApplicationBuilder(args);
 
         builder.Services.AddOptions();
-        builder.Services.Configure<ScreenOptions>(builder.Configuration.GetSection(ScreenOptions.ConfigurationSection));
-        builder.Services.Configure<TilesOptions>(builder.Configuration.GetSection(TilesOptions.ConfigurationSection));
 
         builder.Services.AddSingleton<Game>(this);
         builder.Services.AddSingleton(graphics);
@@ -44,20 +41,6 @@ public sealed class GameHost<TInitialState> : Game
         builder.Services.AddSingleton(Window);
 
         builder.Services.AddSingleton<IGameStateManager, GameStateManager>();
-
-        builder.Services.AddScoped<IGameComponentManager, GameComponentManager>();
-        builder.Services.AddScoped<FixedOutputBoundsBehaviorComponent>();
-        builder.Services.AddScoped<FixedVirtualOutputComponent>();
-        builder.Services.AddScoped<FixedVirtualOutputScaleBehaviorComponent>();
-        builder.Services.AddScoped<ViewOffsetStateComponent>();
-        builder.Services.AddScoped<MouseStateComponent>();
-        builder.Services.AddScoped<MouseTileComponent>();
-        builder.Services.AddScoped<MouseVirtualPixelComponent>();
-        builder.Services.AddScoped<MouseVirtualPixelViewOffsetComponent>();
-        builder.Services.AddScoped<OutputBoundsStateComponent>();
-        builder.Services.AddScoped<OutputScaleStateComponent>();
-        builder.Services.AddScoped<ViewOffsetStateComponent>();
-        builder.Services.AddScoped<VisibleTileAreaComponent>();
 
         services?.Invoke(builder.Services);
 

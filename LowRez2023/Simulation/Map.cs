@@ -26,13 +26,13 @@ public class Map
         if (y > 0 && this[x, y - 1].Terrain != Terrain.Water)
             neighbors |= WaterNeighbors.North;
 
-        if (y < Height && this[x, y + 1].Terrain != Terrain.Water)
+        if (y < Height - 1 && this[x, y + 1].Terrain != Terrain.Water)
             neighbors |= WaterNeighbors.South;
 
         if (x > 0 && this[x - 1, y].Terrain != Terrain.Water)
             neighbors |= WaterNeighbors.West;
 
-        if (x < Width && this[x + 1, y].Terrain != Terrain.Water)
+        if (x < Width - 1 && this[x + 1, y].Terrain != Terrain.Water)
             neighbors |= WaterNeighbors.East;
 
         return neighbors;

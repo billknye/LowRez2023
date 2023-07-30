@@ -1,5 +1,4 @@
-﻿using Billknye.GameLib.Components;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 
 namespace Billknye.GameLib.States;
@@ -32,10 +31,9 @@ internal sealed class GameStateManager : IGameStateManager, IDisposable
         }
 
         var scope = serviceProvider.CreateScope();
-        var componentManager = scope.ServiceProvider.GetRequiredService<IGameComponentManager>();
         var state = ActivatorUtilities.CreateInstance<TState>(scope.ServiceProvider, parameters ?? Array.Empty<object>());
 
-        states.Push(new GameStateStackElement(state, scope, componentManager));
+        states.Push(new GameStateStackElement(state, scope));
         state.StateEntered();
         return state;
     }
@@ -71,13 +69,11 @@ internal sealed class GameStateManager : IGameStateManager, IDisposable
 
     public void Update(GameTime gameTime)
     {
-        Current?.GameComponentManager?.Update(gameTime);
         CurrentState?.Update(gameTime);
     }
 
     public void Draw(GameTime gameTime)
     {
-        Current?.GameComponentManager?.Draw(gameTime);
         CurrentState?.Draw(gameTime);
     }
 
@@ -91,6 +87,6 @@ internal sealed class GameStateManager : IGameStateManager, IDisposable
         }
     }
 
-    private record GameStateStackElement(GameState State, IServiceScope Scope, IGameComponentManager GameComponentManager);
+    private record GameStateStackElement(GameState State, IServiceScope Scope);
 }
 
