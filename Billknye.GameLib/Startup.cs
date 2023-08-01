@@ -1,14 +1,15 @@
 ﻿using Billknye.GameLib.States;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Xna.Framework;
 
 namespace Billknye.GameLib;
 
 public static class Startup
 {
-    public static void Run<TInitialState>(string[] args, Action<IServiceCollection> services = null)
+    public static Game CreateGame<TInitialState>(string[] args, Action<IServiceCollection> services = null)
         where TInitialState : GameState
     {
-        using var game = new GameHost<TInitialState>(args, services);
-        game.Run();
+        var game = new GameHost<TInitialState>(args, services);
+        return game;
     }
 }

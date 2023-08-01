@@ -23,7 +23,7 @@
 <img id="image1" src="icon-192.png" width="100" height="100" style="visibility:collapse;"/>
 
 @code {
-    Game _game;
+    Game? _game;
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -41,7 +41,7 @@
         // init game
         if (_game == null)
         {
-            _game = new GameHost<TestingGameState>(null!, null);
+            _game = GameStart.CreateGame(null);
             _game.Run();
         }
 
