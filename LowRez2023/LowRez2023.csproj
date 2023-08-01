@@ -5,37 +5,51 @@
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
 	<Nullable>enable</Nullable>
+	<Configurations>Debug;Release;Blazor</Configurations>
   </PropertyGroup>
+	
 	<PropertyGroup Condition="$(Configuration)=='Debug'">
 		<OutputType>Exe</OutputType>
 	</PropertyGroup>
-	<PropertyGroup Condition="$(Configuration)!='Debug'">
+	<PropertyGroup Condition="$(Configuration)=='Release'">
 		<OutputType>WinExe</OutputType>
+	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration)=='Blazor'">
+		<OutputType>Library</OutputType>
 	</PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
+	
   <ItemGroup>
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
   </ItemGroup>
+	
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
     <EmbeddedResource Include="Icon.bmp" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
-    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
-  </ItemGroup>
+	
+  <ItemGroup Condition="$(Configuration)=='Blazor'">
+	  <PackageReference Include="nkast.Xna.Framework.Blazor" Version="3.8.9102" />
+	</ItemGroup>
+	<ItemGroup Condition="$(Configuration)!='Blazor'">
+		<PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
+		<PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
+	</ItemGroup>
+	
   <ItemGroup>
     <ProjectReference Include="..\Billknye.GameLib\Billknye.GameLib.csproj" />
   </ItemGroup>
+	
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+	
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />
     <Exec Command="dotnet tool restore" />

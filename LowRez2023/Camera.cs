@@ -45,7 +45,6 @@ internal sealed class Camera
         OutputBounds = new Rectangle(horizontalPadding, verticalPadding, drawSize, drawSize);
 
         var mouseState = Mouse.GetState();
-
         if (mouseState.LeftButton == ButtonState.Pressed && lastMouse.LeftButton == ButtonState.Released)
         {
             mouseCapturePoint = new Point(mouseState.X, mouseState.Y);

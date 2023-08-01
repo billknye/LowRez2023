@@ -14,20 +14,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LowRez2023.Blazor", "LowRez2023.Blazor\LowRez2023.Blazor.csproj", "{CD968C6D-7A2C-447B-8DEE-8C4F645B1DBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Blazor|Any CPU = Blazor|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B58EA066-5466-4BAE-8178-4325B1E9B152}.Blazor|Any CPU.ActiveCfg = Blazor|Any CPU
+		{B58EA066-5466-4BAE-8178-4325B1E9B152}.Blazor|Any CPU.Build.0 = Blazor|Any CPU
 		{B58EA066-5466-4BAE-8178-4325B1E9B152}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B58EA066-5466-4BAE-8178-4325B1E9B152}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B58EA066-5466-4BAE-8178-4325B1E9B152}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B58EA066-5466-4BAE-8178-4325B1E9B152}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F415CC12-808B-4954-A522-3BBA3893D95F}.Blazor|Any CPU.ActiveCfg = Blazor|Any CPU
+		{F415CC12-808B-4954-A522-3BBA3893D95F}.Blazor|Any CPU.Build.0 = Blazor|Any CPU
 		{F415CC12-808B-4954-A522-3BBA3893D95F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F415CC12-808B-4954-A522-3BBA3893D95F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F415CC12-808B-4954-A522-3BBA3893D95F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F415CC12-808B-4954-A522-3BBA3893D95F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD968C6D-7A2C-447B-8DEE-8C4F645B1DBC}.Blazor|Any CPU.ActiveCfg = Blazor|Any CPU
+		{CD968C6D-7A2C-447B-8DEE-8C4F645B1DBC}.Blazor|Any CPU.Build.0 = Blazor|Any CPU
+		{CD968C6D-7A2C-447B-8DEE-8C4F645B1DBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD968C6D-7A2C-447B-8DEE-8C4F645B1DBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

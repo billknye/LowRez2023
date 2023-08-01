@@ -5,12 +5,14 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 namespace LowRez2023;
 
-internal sealed class TestingGameState : GameState
+public sealed class TestingGameState : GameState
 {
     private readonly RenderTarget2D renderTarget;
     private readonly SpriteBatch spriteBatch;
     private readonly GraphicsDevice graphicsDevice;
 
+    private readonly SpriteRenderer spriteRenderer;
+    private readonly TextRenderer textRenderer;
     private readonly Camera camera;
     private readonly MapRenderer renderMapComponent;
 
@@ -25,8 +27,10 @@ internal sealed class TestingGameState : GameState
         map = new Map(256, 256);
 
         var spriteSheet = contentManager.Load<Texture2D>("Sprites");
+        spriteRenderer = new SpriteRenderer(spriteBatch, spriteSheet);
+        textRenderer = new TextRenderer(spriteRenderer);
         camera = new Camera(gameWindow, map);
-        renderMapComponent = new MapRenderer(camera, map, spriteSheet, spriteBatch);
+        renderMapComponent = new MapRenderer(camera, map, spriteRenderer);
     }
     protected override void StateEnteredInternal()
     {
@@ -43,7 +47,12 @@ internal sealed class TestingGameState : GameState
         graphicsDevice.SetRenderTarget(renderTarget);
         graphicsDevice.Clear(Color.Magenta);
 
+        spriteBatch.Begin();
+
         renderMapComponent.Draw();
+        textRenderer.DrawText(new Point(0, 0), "$1,000,000");
+
+        spriteBatch.End();
 
         // Switch to back buffer.
         graphicsDevice.SetRenderTarget(null);

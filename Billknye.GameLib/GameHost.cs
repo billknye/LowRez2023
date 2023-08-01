@@ -2,7 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Xna.Framework;
+#if !BLAZOR
 using Microsoft.Xna.Framework.Input;
+#endif
 
 namespace Billknye.GameLib;
 
@@ -53,6 +55,17 @@ public sealed class GameHost<TInitialState> : Game
         base.Initialize();
     }
 
+#if BLAZOR
+    protected override void OnExiting(EventArgs args)
+    {
+        if (host != null)
+        {
+            host.StopAsync(TimeSpan.FromSeconds(4.0)).GetAwaiter().GetResult();
+        }
+
+        base.OnExiting(args);
+    }
+#else
     protected override void OnExiting(object sender, EventArgs args)
     {
         if (host != null)
@@ -62,6 +75,7 @@ public sealed class GameHost<TInitialState> : Game
 
         base.OnExiting(sender, args);
     }
+#endif
 
     protected override void LoadContent()
     {
@@ -70,8 +84,10 @@ public sealed class GameHost<TInitialState> : Game
 
     protected override void Update(GameTime gameTime)
     {
+#if !BLAZOR
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
+#endif
 
         gameStateManager?.Update(gameTime);
         base.Update(gameTime);

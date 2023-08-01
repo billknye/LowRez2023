@@ -2,8 +2,8 @@
 
 ## LowRez2023
 
-Basic tile rendering with mouse pan and many bugs.
+A city builder game.
 
 ## Billknye.GameLib
 
-A questionable attempt at creating composable game components managed via DI.
+Some basic game stuff.

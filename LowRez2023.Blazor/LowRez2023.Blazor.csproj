@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	  <MonoGamePlatform>BlazorGL</MonoGamePlatform>
+
+	  <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
+
+	  <Configurations>Debug;Release;Blazor</Configurations>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<BlazorEnableTimeZoneSupport>false</BlazorEnableTimeZoneSupport>
+	</PropertyGroup>
+
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>$(DefineConstants);TRACE;BLAZORGL</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DefineConstants>$(DefineConstants);TRACE;BLAZORGL</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="nkast.Xna.Framework" Version="3.8.9102" />
+		<PackageReference Include="nkast.Xna.Framework.Blazor" Version="3.8.9102" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.9" PrivateAssets="all" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<MonoGameContentReference Include="..\LowRez2023\Content\Content.mgcb">
+			<Link>Content\Content.mgcb</Link>
+		</MonoGameContentReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Billknye.GameLib\Billknye.GameLib.csproj" />
+	  <ProjectReference Include="..\LowRez2023\LowRez2023.csproj" />
+	</ItemGroup>
+
+
+	<Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder17.targets" />
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\Content\" />
+	</ItemGroup>
+	
+</Project>
