@@ -43,6 +43,26 @@ internal sealed class Camera
         var horizontalPadding = (gameWindow.ClientBounds.Width - drawSize) / 2;
         var verticalPadding = (gameWindow.ClientBounds.Height - drawSize) / 2;
         OutputBounds = new Rectangle(horizontalPadding, verticalPadding, drawSize, drawSize);
+        var viewOffset = ViewOffset;
+
+
+        var keyboardState = Keyboard.GetState();
+        if (keyboardState.IsKeyDown(Keys.W))
+        {
+            viewOffset.Y--;
+        }
+        if (keyboardState.IsKeyDown(Keys.A))
+        {
+            viewOffset.X--;
+        }
+        if (keyboardState.IsKeyDown(Keys.S))
+        {
+            viewOffset.Y++;
+        }
+        if (keyboardState.IsKeyDown(Keys.D))
+        {
+            viewOffset.X++;
+        }
 
         var mouseState = Mouse.GetState();
         if (mouseState.LeftButton == ButtonState.Pressed && lastMouse.LeftButton == ButtonState.Released)
@@ -61,22 +81,24 @@ internal sealed class Camera
             mouseMoved |= moved != default;
             if (moved != default)
             {
-                var viewOffset = ViewOffset;
                 viewOffset += moved;
                 mouseMoveAccumulator -= new Point(moved.X * PixelScale, moved.Y * PixelScale);
-
-                viewOffset.X = Math.Max(0, viewOffset.X);
-                viewOffset.Y = Math.Max(0, viewOffset.Y);
-
-                viewOffset.X = Math.Min(map.Width * TileSize - OutputSize, viewOffset.X);
-                viewOffset.Y = Math.Min(map.Height * TileSize - OutputSize, viewOffset.Y);
-
-                ViewOffset = viewOffset;
             }
         }
         else if (mouseCapturePoint != null && mouseState.LeftButton == ButtonState.Released)
         {
             mouseCapturePoint = null;
+        }
+
+        if (viewOffset != ViewOffset)
+        {
+            viewOffset.X = Math.Max(0, viewOffset.X);
+            viewOffset.Y = Math.Max(0, viewOffset.Y);
+
+            viewOffset.X = Math.Min(map.Width * TileSize - OutputSize, viewOffset.X);
+            viewOffset.Y = Math.Min(map.Height * TileSize - OutputSize, viewOffset.Y);
+
+            ViewOffset = viewOffset;
         }
 
         var mouseInOutputArea = OutputBounds.Contains(mouseState.X, mouseState.Y);
