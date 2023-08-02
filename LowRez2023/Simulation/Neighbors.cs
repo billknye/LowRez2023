@@ -3,7 +3,7 @@
 namespace LowRez2023.Simulation;
 
 [Flags]
-public enum WaterNeighbors : byte
+public enum Neighbors : byte
 {
     None = 0,
     North = 1,

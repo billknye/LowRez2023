@@ -66,10 +66,11 @@ internal sealed class MapRenderer
             spriteRenderer.DrawSprite(src, dest, Color.White);
         }
 
-        if (tile.Thing)
+        if (tile.Improvement == Improvement.Road)
         {
-            src = new Rectangle(0, 0, tileSize, tileSize);
-            spriteRenderer.DrawSprite(src, dest, Color.FromNonPremultiplied(0, 255, 0, 64));
+            var neighbors = map.GetRoadNeighbors(x, y);
+            src = new Rectangle(tileSize * (int)neighbors, 30, tileSize, tileSize);
+            spriteRenderer.DrawSprite(src, dest, Color.White);
         }
 
         // Grid overlay draw

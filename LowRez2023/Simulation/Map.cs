@@ -1,4 +1,5 @@
 ﻿using Billknye.GameLib.Noise;
+using System;
 
 namespace LowRez2023.Simulation;
 
@@ -19,21 +20,27 @@ public class Map
         }
     }
 
-    public WaterNeighbors GetNonWaterNeighbors(int x, int y)
+    public Neighbors GetNonWaterNeighbors(int x, int y)
+        => GetNeighbors(x, y, t => t.Terrain != Terrain.Water);
+
+    public Neighbors GetRoadNeighbors(int x, int y)
+        => GetNeighbors(x, y, t => t.Improvement == Improvement.Road);
+
+    public Neighbors GetNeighbors(int x, int y, Func<Tile, bool> predicate)
     {
-        var neighbors = WaterNeighbors.None;
+        var neighbors = Neighbors.None;
 
-        if (y > 0 && this[x, y - 1].Terrain != Terrain.Water)
-            neighbors |= WaterNeighbors.North;
+        if (y > 0 && predicate(this[x, y - 1]))
+            neighbors |= Neighbors.North;
 
-        if (y < Height - 1 && this[x, y + 1].Terrain != Terrain.Water)
-            neighbors |= WaterNeighbors.South;
+        if (y < Height - 1 && predicate(this[x, y + 1]))
+            neighbors |= Neighbors.South;
 
-        if (x > 0 && this[x - 1, y].Terrain != Terrain.Water)
-            neighbors |= WaterNeighbors.West;
+        if (x > 0 && predicate(this[x - 1, y]))
+            neighbors |= Neighbors.West;
 
-        if (x < Width - 1 && this[x + 1, y].Terrain != Terrain.Water)
-            neighbors |= WaterNeighbors.East;
+        if (x < Width - 1 && predicate(this[x + 1, y]))
+            neighbors |= Neighbors.East;
 
         return neighbors;
     }
