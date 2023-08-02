@@ -1,6 +1,5 @@
 ﻿using LowRez2023.Simulation;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace LowRez2023;
 
@@ -31,9 +30,7 @@ internal sealed class MapRenderer
 
         src = new Rectangle(tileSize, 0, tileSize, tileSize);
         dest = new Rectangle(mouseTile.X * tileSize - viewOffset.X, mouseTile.Y * tileSize - viewOffset.Y, tileSize, tileSize);
-        //spriteBatch.Draw(spriteSheet, dest, src, Color.FromNonPremultiplied(0, 0, 0, 128));
         spriteRenderer.DrawSprite(src, dest, Color.FromNonPremultiplied(0, 0, 0, 128));
-
     }
 
     private void DrawMap(int tileSize)
@@ -59,7 +56,6 @@ internal sealed class MapRenderer
 
         // Terrain draw
         src = new Rectangle(0 + tile.Terrain == Terrain.Water ? tileSize : 0, 10, tileSize, tileSize);
-        //spriteBatch.Draw(spriteSheet, dest, src, Color.White);
         spriteRenderer.DrawSprite(src, dest, Color.White);
 
         // Shore draw
@@ -67,53 +63,18 @@ internal sealed class MapRenderer
         {
             var neighbors = map.GetNonWaterNeighbors(x, y);
             src = new Rectangle((int)neighbors * tileSize, 3 * tileSize, tileSize, tileSize);
-            //spriteBatch.Draw(spriteSheet, dest, src, Color.White);
             spriteRenderer.DrawSprite(src, dest, Color.White);
+        }
+
+        if (tile.Thing)
+        {
+            src = new Rectangle(0, 0, tileSize, tileSize);
+            spriteRenderer.DrawSprite(src, dest, Color.FromNonPremultiplied(0, 255, 0, 64));
         }
 
         // Grid overlay draw
         src = new Rectangle(5 * tileSize, 0, tileSize, tileSize);
-        //spriteBatch.Draw(spriteSheet, dest, src, Color.FromNonPremultiplied(0, 0, 0, 32));
+
         spriteRenderer.DrawSprite(src, dest, Color.FromNonPremultiplied(0, 0, 0, 32));
-    }
-}
-
-public class SpriteRenderer
-{
-    private readonly SpriteBatch spriteBatch;
-    private readonly Texture2D spriteSheet;
-
-    public SpriteRenderer(SpriteBatch spriteBatch, Texture2D spriteSheet)
-    {
-        this.spriteBatch = spriteBatch;
-        this.spriteSheet = spriteSheet;
-    }
-
-    public void DrawSprite(Rectangle source, Rectangle destination, Color color)
-    {
-        spriteBatch.Draw(spriteSheet, destination, source, color);
-    }
-}
-
-public class TextRenderer
-{
-    private readonly SpriteRenderer spriteRenderer;
-
-    public TextRenderer(SpriteRenderer spriteRenderer)
-    {
-        this.spriteRenderer = spriteRenderer;
-    }
-
-    public void DrawText(Point topLeft, string text, Color? color = null)
-    {
-        var drawColor = color ?? Color.White;
-
-        Rectangle dest = new Rectangle(topLeft, new Point(5, 7));
-
-        foreach (var ch in text)
-        {
-            spriteRenderer.DrawSprite(new Rectangle((ch % 32) * 5, 128 + (ch / 32) * 7, 5, 7), dest, drawColor);
-            dest.X += 4;
-        }
     }
 }

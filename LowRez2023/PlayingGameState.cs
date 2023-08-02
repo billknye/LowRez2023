@@ -3,9 +3,10 @@ using LowRez2023.Simulation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+
 namespace LowRez2023;
 
-public sealed class TestingGameState : GameState
+public sealed class PlayingGameState : GameState
 {
     private readonly RenderTarget2D renderTarget;
     private readonly SpriteBatch spriteBatch;
@@ -13,12 +14,14 @@ public sealed class TestingGameState : GameState
 
     private readonly SpriteRenderer spriteRenderer;
     private readonly TextRenderer textRenderer;
+
     private readonly Camera camera;
+    private readonly Tool tool;
     private readonly MapRenderer renderMapComponent;
 
     private readonly Map map;
 
-    public TestingGameState(GraphicsDevice graphicsDevice, GameWindow gameWindow, ContentManager contentManager)
+    public PlayingGameState(GraphicsDevice graphicsDevice, GameWindow gameWindow, ContentManager contentManager)
     {
         renderTarget = new RenderTarget2D(graphicsDevice, Camera.OutputSize, Camera.OutputSize);
         spriteBatch = new SpriteBatch(graphicsDevice);
@@ -29,7 +32,9 @@ public sealed class TestingGameState : GameState
         var spriteSheet = contentManager.Load<Texture2D>("Sprites");
         spriteRenderer = new SpriteRenderer(spriteBatch, spriteSheet);
         textRenderer = new TextRenderer(spriteRenderer);
+
         camera = new Camera(gameWindow, map);
+        tool = new Tool(spriteRenderer, textRenderer, camera, map);
         renderMapComponent = new MapRenderer(camera, map, spriteRenderer);
     }
     protected override void StateEnteredInternal()
@@ -39,6 +44,7 @@ public sealed class TestingGameState : GameState
     protected override void UpdateInternal(GameTime gameTime)
     {
         camera.Update();
+        tool.Update();
     }
 
     protected override void DrawInternal(GameTime gameTime)
@@ -50,6 +56,8 @@ public sealed class TestingGameState : GameState
         spriteBatch.Begin();
 
         renderMapComponent.Draw();
+        tool.Draw();
+
         textRenderer.DrawText(new Point(0, 0), "$1,000,000");
 
         spriteBatch.End();

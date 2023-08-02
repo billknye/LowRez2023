@@ -12,7 +12,7 @@ public static partial class GameStart
 {
     public static Game CreateGame(string[]? args)
     {
-        var game = Startup.CreateGame<TestingGameState>(args, AddGameServices);
+        var game = Startup.CreateGame<PlayingGameState>(args, AddGameServices);
         return game;
     }
 

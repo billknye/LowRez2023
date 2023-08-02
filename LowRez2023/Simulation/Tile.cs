@@ -3,4 +3,6 @@
 public struct Tile
 {
     public Terrain Terrain { get; set; }
+
+    public bool Thing { get; set; }
 }

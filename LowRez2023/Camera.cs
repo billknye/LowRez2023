@@ -11,10 +11,9 @@ internal sealed class Camera
 
     private readonly GameWindow gameWindow;
     private readonly Map map;
-    private MouseState lastMouse;
+
     private Point? mouseCapturePoint;
     private Point mouseMoveAccumulator;
-    private bool mouseMoved;
 
     public int PixelScale { get; private set; }
 
@@ -27,6 +26,12 @@ internal sealed class Camera
     public Point MouseTile { get; private set; }
 
     public Point MouseVirtualPixel { get; private set; }
+
+    public MouseState CurrentMouse { get; private set; }
+
+    public KeyboardState CurrentKeyboard { get; private set; }
+
+    public MouseState LastMouse { get; private set; }
 
     public Camera(GameWindow gameWindow, Map map)
     {
@@ -45,47 +50,45 @@ internal sealed class Camera
         OutputBounds = new Rectangle(horizontalPadding, verticalPadding, drawSize, drawSize);
         var viewOffset = ViewOffset;
 
-
-        var keyboardState = Keyboard.GetState();
-        if (keyboardState.IsKeyDown(Keys.W))
+        CurrentKeyboard = Keyboard.GetState();
+        if (CurrentKeyboard.IsKeyDown(Keys.W))
         {
             viewOffset.Y--;
         }
-        if (keyboardState.IsKeyDown(Keys.A))
+        if (CurrentKeyboard.IsKeyDown(Keys.A))
         {
             viewOffset.X--;
         }
-        if (keyboardState.IsKeyDown(Keys.S))
+        if (CurrentKeyboard.IsKeyDown(Keys.S))
         {
             viewOffset.Y++;
         }
-        if (keyboardState.IsKeyDown(Keys.D))
+        if (CurrentKeyboard.IsKeyDown(Keys.D))
         {
             viewOffset.X++;
         }
 
-        var mouseState = Mouse.GetState();
-        if (mouseState.LeftButton == ButtonState.Pressed && lastMouse.LeftButton == ButtonState.Released)
+        LastMouse = CurrentMouse;
+        CurrentMouse = Mouse.GetState();
+        if (CurrentMouse.RightButton == ButtonState.Pressed && LastMouse.RightButton == ButtonState.Released)
         {
-            mouseCapturePoint = new Point(mouseState.X, mouseState.Y);
+            mouseCapturePoint = new Point(CurrentMouse.X, CurrentMouse.Y);
             mouseMoveAccumulator = new Point();
-            mouseMoved = false;
         }
-        else if (mouseState.LeftButton == ButtonState.Pressed && mouseCapturePoint != null)
+        else if (CurrentMouse.RightButton == ButtonState.Pressed && mouseCapturePoint != null)
         {
-            var diff = new Point(lastMouse.X - mouseState.X, lastMouse.Y - mouseState.Y);
+            var diff = new Point(LastMouse.X - CurrentMouse.X, LastMouse.Y - CurrentMouse.Y);
             mouseMoveAccumulator += diff;
 
             var moved = new Point(mouseMoveAccumulator.X / PixelScale, mouseMoveAccumulator.Y / PixelScale);
 
-            mouseMoved |= moved != default;
             if (moved != default)
             {
                 viewOffset += moved;
                 mouseMoveAccumulator -= new Point(moved.X * PixelScale, moved.Y * PixelScale);
             }
         }
-        else if (mouseCapturePoint != null && mouseState.LeftButton == ButtonState.Released)
+        else if (mouseCapturePoint != null && CurrentMouse.RightButton == ButtonState.Released)
         {
             mouseCapturePoint = null;
         }
@@ -101,16 +104,14 @@ internal sealed class Camera
             ViewOffset = viewOffset;
         }
 
-        var mouseInOutputArea = OutputBounds.Contains(mouseState.X, mouseState.Y);
+        var mouseInOutputArea = OutputBounds.Contains(CurrentMouse.X, CurrentMouse.Y);
         if (mouseInOutputArea)
         {
-            var mouseOutputRelativeInPixels = new Point(mouseState.X - OutputBounds.X, mouseState.Y - OutputBounds.Y);
+            var mouseOutputRelativeInPixels = new Point(CurrentMouse.X - OutputBounds.X, CurrentMouse.Y - OutputBounds.Y);
             MouseVirtualPixel = new Point((int)Math.Floor(mouseOutputRelativeInPixels.X / (double)PixelScale) + ViewOffset.X, (int)Math.Floor(mouseOutputRelativeInPixels.Y / (double)PixelScale + ViewOffset.Y));
 
             MouseTile = new Point((int)Math.Floor(MouseVirtualPixel.X / (double)TileSize), (int)Math.Floor(MouseVirtualPixel.Y / (double)TileSize));
         }
-
-        lastMouse = mouseState;
 
         var minx = ViewOffset.X / TileSize;
         var miny = ViewOffset.Y / TileSize;
