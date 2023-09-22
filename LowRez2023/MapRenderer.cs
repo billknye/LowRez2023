@@ -72,6 +72,17 @@ internal sealed class MapRenderer
             src = new Rectangle(tileSize * (int)neighbors, 30, tileSize, tileSize);
             spriteRenderer.DrawSprite(src, dest, Color.White);
         }
+        else if (tile.Improvement == Improvement.Lot)
+        {
+            src = new Rectangle(0, 0, tileSize, tileSize);
+            spriteRenderer.DrawSprite(src, dest, Color.FromNonPremultiplied(0, 255, 0, 128));
+
+            if (tile.Lot.Flags.HasFlag(LotFlags.TransportAccess))
+            {
+                src = new Rectangle(55 + (int)tile.Lot.Orientation * 5, 0, 5, 5);
+                spriteRenderer.DrawSprite(src, dest, Color.FromNonPremultiplied(0, 255, 0, 128));
+            }
+        }
 
         // Grid overlay draw
         src = new Rectangle(5 * tileSize, 0, tileSize, tileSize);

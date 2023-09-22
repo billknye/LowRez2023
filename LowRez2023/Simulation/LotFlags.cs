@@ -3,9 +3,8 @@
 namespace LowRez2023.Simulation;
 
 [Flags]
-public enum Improvement : byte
+public enum LotFlags : byte
 {
     None = 0,
-    Road = 1,
-    Lot = 2
+    TransportAccess = 1
 }

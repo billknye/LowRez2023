@@ -10,20 +10,22 @@ internal sealed class Tool
     private readonly TextRenderer textRenderer;
     private readonly Camera camera;
     private readonly Map map;
-
+    private readonly Notices notices;
     private readonly RoadToolMode roadTool;
+    private readonly ZoneTool zoneTool;
 
     private ToolMode? toolMode;
 
-    public Tool(SpriteRenderer spriteRenderer, TextRenderer textRenderer, Camera camera, Map map)
+    public Tool(SpriteRenderer spriteRenderer, TextRenderer textRenderer, Camera camera, Map map, Notices notices)
     {
         this.spriteRenderer = spriteRenderer;
         this.textRenderer = textRenderer;
         this.camera = camera;
         this.map = map;
+        this.notices = notices;
 
-        roadTool = new RoadToolMode(map);
-        toolMode = roadTool;
+        roadTool = new RoadToolMode(map, notices);
+        zoneTool = new ZoneTool(map, notices);
     }
 
     public void Update()
@@ -32,7 +34,7 @@ internal sealed class Tool
             && camera.CurrentMouse.LeftButton == ButtonState.Pressed)
         {
             // Mouse down, begin use tool
-            toolMode = roadTool;
+            toolMode = zoneTool;
             toolMode.BeginOperation(camera.MouseTile);
         }
         else if (camera.CurrentMouse.LeftButton == ButtonState.Released
@@ -40,7 +42,8 @@ internal sealed class Tool
             && toolMode is not null)
         {
             // Mouse up, end use tool
-            toolMode.TryCompleteOperation(camera.MouseTile);
+            toolMode.UpdateOperation(camera.MouseTile);
+            toolMode.TryCompleteOperation();
             toolMode = null;
         }
         else if (camera.CurrentMouse.LeftButton == ButtonState.Pressed
@@ -115,16 +118,18 @@ internal abstract class ToolMode
         tileCurrent = default;
     }
 
-    public abstract bool TryCompleteOperation(Point tileEnd);
+    public abstract bool TryCompleteOperation();
 }
 
 internal sealed class RoadToolMode : ToolMode
 {
     private readonly Map map;
+    private readonly Notices notices;
 
-    public RoadToolMode(Map map)
+    public RoadToolMode(Map map, Notices notices)
     {
         this.map = map;
+        this.notices = notices;
     }
 
     public override Color GetOverlayColor(Tile tile)
@@ -151,8 +156,9 @@ internal sealed class RoadToolMode : ToolMode
         }
     }
 
-    public override bool TryCompleteOperation(Point tileEnd)
+    public override bool TryCompleteOperation()
     {
+        var count = 0;
         var bounds = GetToolBounds();
         for (int x = bounds.X; x < bounds.Right; x++)
         {
@@ -164,10 +170,55 @@ internal sealed class RoadToolMode : ToolMode
                     && tile.Improvement == Improvement.None)
                 {
                     tile.Improvement = Improvement.Road;
+                    count++;
                 }
             }
         }
 
+        notices.PostNotice($"Roads {count}");
         return false;
+    }
+}
+
+internal sealed class ZoneTool : ToolMode
+{
+    private readonly Map map;
+    private readonly Notices notices;
+
+    public ZoneTool(Map map, Notices notices)
+    {
+        this.map = map;
+        this.notices = notices;
+    }
+
+    public override bool TryCompleteOperation()
+    {
+        var count = 0;
+        var bounds = GetToolBounds();
+        for (int x = bounds.X; x < bounds.Right; x++)
+        {
+            for (int y = bounds.Y; y < bounds.Bottom; y++)
+            {
+                ref var tile = ref map[x, y];
+
+                if (tile.Terrain == Terrain.Grass
+                    && tile.Improvement == Improvement.None)
+                {
+                    tile.Improvement = Improvement.Lot;
+
+                    tile.Lot = new LotReference
+                    {
+                        LotId = 1,
+                        Flags = x == bounds.X ? LotFlags.TransportAccess : LotFlags.None,
+                        OffsetWithinLot = new Point(x - bounds.X, y - bounds.Y),
+                        Orientation = Orientation.North,
+                        LotType = LotType.Residential
+                    };
+                    count++;
+                }
+            }
+        }
+
+        return true;
     }
 }

@@ -18,6 +18,7 @@ public sealed class PlayingGameState : GameState
     private readonly Camera camera;
     private readonly Tool tool;
     private readonly MapRenderer renderMapComponent;
+    private readonly Notices notices;
 
     private readonly Map map;
 
@@ -33,10 +34,12 @@ public sealed class PlayingGameState : GameState
         spriteRenderer = new SpriteRenderer(spriteBatch, spriteSheet);
         textRenderer = new TextRenderer(spriteRenderer);
 
+        notices = new Notices(textRenderer);
         camera = new Camera(gameWindow, map);
-        tool = new Tool(spriteRenderer, textRenderer, camera, map);
+        tool = new Tool(spriteRenderer, textRenderer, camera, map, notices);
         renderMapComponent = new MapRenderer(camera, map, spriteRenderer);
     }
+
     protected override void StateEnteredInternal()
     {
     }
@@ -45,6 +48,7 @@ public sealed class PlayingGameState : GameState
     {
         camera.Update();
         tool.Update();
+        notices.Update(gameTime);
     }
 
     protected override void DrawInternal(GameTime gameTime)
@@ -57,6 +61,8 @@ public sealed class PlayingGameState : GameState
 
         renderMapComponent.Draw();
         tool.Draw();
+
+        notices.Draw();
 
         textRenderer.DrawText(new Point(0, 0), "$1,000,000");
 

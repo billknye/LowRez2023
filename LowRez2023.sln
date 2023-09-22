@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LowRez2023.Blazor", "LowRez2023.Blazor\LowRez2023.Blazor.csproj", "{CD968C6D-7A2C-447B-8DEE-8C4F645B1DBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LowRez2023.Tests", "LowRez2023.Tests\LowRez2023.Tests.csproj", "{2D2B94A6-FDB2-4DB9-A136-F55C784C57D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Blazor|Any CPU = Blazor|Any CPU
@@ -39,6 +41,12 @@ Global
 		{CD968C6D-7A2C-447B-8DEE-8C4F645B1DBC}.Blazor|Any CPU.Build.0 = Blazor|Any CPU
 		{CD968C6D-7A2C-447B-8DEE-8C4F645B1DBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CD968C6D-7A2C-447B-8DEE-8C4F645B1DBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D2B94A6-FDB2-4DB9-A136-F55C784C57D5}.Blazor|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D2B94A6-FDB2-4DB9-A136-F55C784C57D5}.Blazor|Any CPU.Build.0 = Debug|Any CPU
+		{2D2B94A6-FDB2-4DB9-A136-F55C784C57D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D2B94A6-FDB2-4DB9-A136-F55C784C57D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D2B94A6-FDB2-4DB9-A136-F55C784C57D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D2B94A6-FDB2-4DB9-A136-F55C784C57D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
